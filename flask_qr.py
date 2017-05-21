@@ -1,7 +1,7 @@
 from flask import current_app, url_for, Markup
 
 import os.path
-import urllib
+import urllib.request, urllib.parse, urllib.error
 
 import qrcode
 
@@ -74,7 +74,7 @@ class QR(object):
         #Generate/get qr
         qr = ""
         if(self.mode == "google"):
-            print "Generating google qr code " + message
+            print("Generating google qr code " + message)
             qr = self._googleQR(message, dimension)
         elif(self.mode == "local"):
             qr = self._localQR(message, dimension)
@@ -90,7 +90,7 @@ class QR(object):
 
         base = "https://chart.googleapis.com/chart?"
         dimension = "chs=" + str(dimension)+ "x" + str(dimension)
-        qr = "cht=qr&chl=" + urllib.quote_plus(message)
+        qr = "cht=qr&chl=" + urllib.parse.quote_plus(message)
         error = "chld=" + self.errorLevel
         return base + dimension + "&" +  qr + "&" + error +"|" + str(self.margin)
         
@@ -99,10 +99,10 @@ class QR(object):
     """
     def _localQR(self, message, dimension):
         message = message.replace("https://", "").replace("http://", "").replace("/","")
-        fileName = urllib.quote_plus(message) + str(dimension) + str(self.margin) +".png"
+        fileName = urllib.parse.quote_plus(message) + str(dimension) + str(self.margin) +".png"
         filePath = os.path.join(self.app.qr_folder, fileName)
         if (os.path.isfile(filePath)):
-            print "qr exists, returning url"
+            print("qr exists, returning url")
             pass
         else:
             #filePath = os.path.join(self.app.qr_folder, fileName)

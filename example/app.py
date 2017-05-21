@@ -13,7 +13,7 @@ qr = QR(app, mode="local",errorCorrect="Q")
 @app.route("/")
 def index():
     q = qr.qrFor("This_is_a_testqrcode")
-    print q
+    print(q)
     return render_template("base.html")
 
 
